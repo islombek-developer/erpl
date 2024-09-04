@@ -1,0 +1,17 @@
+{% extends 'users/dashboard.html' %}
+
+{% block content %}
+
+<div class="container">
+    <h1>Create page</h1>
+
+<form  method="post" >
+    {% csrf_token %}
+
+    {{form}}
+
+    <button type="submit" class="btn btn-outline-info">Save</button>
+</form>
+</div>
+
+{% endblock content %}

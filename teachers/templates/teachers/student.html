@@ -1,0 +1,27 @@
+{% extends 'teachers/dashboard.html' %}
+
+{% block content %}
+<div class="mt-5">
+  <h4>{{ team.name }} </h4>
+</div>
+
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">First name</th>
+        <th scope="col">team</th>
+        <th scope="col">Homework status</th>
+      </tr>
+    </thead>
+    <tbody >
+        {% for i in student %}
+      <tr class="table-info">
+        <td>{{i.user.first_name}}</td>
+        <td>{{i.team.name}}</td>
+        <td>Active</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+{% endblock content %}

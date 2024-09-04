@@ -1,0 +1,48 @@
+{% extends 'users/dashboard.html' %}
+
+{% block content %}
+<div class="container">
+<a href="{% url 'users:create' %}" class="btn btn-outline-success ms-1">creat</a>
+
+<table class="table table-primary">
+    <thead>
+      <tr>
+        <th scope="col">id</th>
+        <th scope="col">First name</th>
+        <th scope="col">last name</th>
+        <th scope="col">phone number</th>
+        <th scope="col"> address</th>
+        <th scope="col"> email</th>
+        <th scope="col">Name</th>
+        {% if user.is_authenticated %}
+        <th scope="col">Button</th>
+        {% endif %}
+      </tr>
+    </thead>
+    {% for i in form %}
+    <tbody>
+      <tr>
+        <th scope="row">{{i.id}}</th>
+        {% if request.user.is_authenticated %}
+        <td><a href="{% url 'users:profil' i.id %}">{{i.first_name}}</a></td>
+        {% else %}
+        <td>{{i.first_name}}</td>
+        {% endif %}
+        <td>{{i.last_name}}</td>
+        <td>{{i.phone_number}}</td>
+        <td>{{i.address}}</td>
+        <td>{{i.email}}</td>
+        <td>{{i.username}}</td>
+        <td>
+          {% if user.is_authenticated %}
+          <a class="btn btn-outline-danger" href="{% url 'users:delete' i.id %}">Delete</a>
+          <a class="btn btn-outline-info" href="{% url 'users:edit' i.id %}">Edit</a>
+          {% endif %}
+        </td>
+      </tr>
+      
+    </tbody>
+    {% endfor %}
+  </table>
+</div>
+{% endblock content %}

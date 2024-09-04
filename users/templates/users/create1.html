@@ -1,0 +1,14 @@
+{% extends 'users/dashboard.html' %}
+
+{% block content %}
+</head>
+<body>
+    <h1>Create a New Team</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-outline-info">Create Team</button>
+    </form>
+</body>
+</html>
+{% endblock content %}

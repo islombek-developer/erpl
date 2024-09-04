@@ -1,0 +1,16 @@
+{% extends 'teachers/dashboard.html' %}
+
+{% block content %}
+
+<div class="container" style="background-color: rgb(236, 236, 211);">
+
+    <form  method="post" >
+        {% csrf_token %}
+
+        {{form}}
+
+        <button type="submit" class="btn btn-success mt-2">Save</button>
+    </form>
+    </div>
+
+{% endblock content %}

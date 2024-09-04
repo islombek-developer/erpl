@@ -1,0 +1,78 @@
+{% extends 'teachers/dashboard.html' %}
+
+{% block content %}
+<div class="mt-5">
+  <h4>{{ team.name }} </h4>
+</div>
+<br>
+<nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary">
+  <!-- Container wrapper -->
+  <div class="container-fluid">
+    <!-- Toggle button -->
+    <button
+      data-mdb-collapse-init
+      class="navbar-toggler"
+      type="button"
+      data-mdb-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'teachers:guruh' team.id %}">Darslar</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'teachers:student' team.id %}">O'quvchilar</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'teachers:davomat_list' team.id %}">Yoqlama</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'teachers:month' team.id %}">To'lovlar</a>
+        </li>
+      </ul>
+      <ul class="nav-item">
+          <a class="btn btn-outline-success" href="{% url 'teachers:create' team.id %}">Create Lesson</a>
+      </ul>
+    </div>
+
+  </div>
+</nav>
+<br>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Title</th>
+            <th scope="col">Date</th>
+            <th scope="col">Homework Status</th>
+            <th scope="col">lesson file</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        {% for lesson in lessons %}
+        <tr class="table-info">
+            <td>
+                <a href="{% url 'teachers:stydents' lesson.id %}">{{ lesson.title }}</a>
+            </td>
+            <td>{{ lesson.date }}</td>
+            <td>{{ lesson.homework_status|yesno:"Active,Inactive" }}</td>
+            <td>
+              {% if lesson.lesson_file %}
+              <a href="{{ lesson.lesson_file.url }}">{{lesson.lesson_file}}</a>
+              {% else %}
+              No File
+              {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+{% endblock content %}

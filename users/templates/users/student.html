@@ -1,0 +1,57 @@
+{% extends 'users/dashboard.html' %}
+
+{% block content %}
+<div class="container">
+  <div class="input-group rounded">
+  <form method="get">
+    <div class="input-group ">
+      <input type="search" class="form-control rounded" name="search" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+      <button type="submit" class="btn btn-outline-primary" data-mdb-ripple-init>search</button>
+    </div>
+  </form>
+  </div>
+    <table class="table align-middle mb-0 bg-white">
+        <thead class="bg-light">
+          <tr>
+            <th>Studetn Name</th>
+            <th>User Name</th>
+            <th>Team</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for i in students %}
+          <tr>
+            <td>
+              <div class="d-flex align-items-center">
+                <img
+                    src="{{i.user.image.url}}"
+                    alt=""
+                    style="width: 45px; height: 45px"
+                    class="rounded-circle"
+                    />
+                <div class="ms-3">
+                  <p class="fw-bold mb-1">{{i.user.first_name}}</p>
+                  <p class="text-muted mb-0">john.doe@gmail.com</p>
+                </div>
+              </div>
+            </td>
+            <td>
+              <p class="fw-normal mb-1">{{i.user.username}}</p>
+            </td>
+            <td class="fw-normal mb-1">{{i.team}}</td>
+            
+            <td>
+              <a class="btn btn-outline-info" href="{% url 'users:edit_student' i.id %}">Edit</a>
+              <a class="btn btn-outline-danger" href="{% url 'users:delete' i.id %}">delete</a>
+            </td>
+      
+
+            
+          </tr>
+        {% endfor %}
+    
+        </tbody>
+      </table>
+</div>
+{% endblock content %}

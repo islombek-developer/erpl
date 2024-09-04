@@ -1,0 +1,30 @@
+{% extends 'teachers/dashboard.html' %}
+
+{% block content %}
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Month</th>
+            <th scope="col">Team</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if months %}
+            {% for mon in months %}
+            <tr class="table-info">
+                <td><a href="{% url 'teachers:tolov_list' mon.id %}">{{ mon.month }}</a></td>
+                <td>{{ mon.team }}</td>
+                <td><a class="btn btn-outline-danger" href="{% url 'teachers:deletemont' mon.id %}">Delete</a></td>
+            </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="3" class="text-center">No months available yet.</td>
+            </tr>
+        {% endif %}
+    </tbody>
+</table>
+
+<a class="btn btn-outline-success" href="{% url 'teachers:createmont' %}">Create New Month</a>
+{% endblock content %}

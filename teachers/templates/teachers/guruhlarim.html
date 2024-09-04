@@ -1,0 +1,26 @@
+{% extends 'teachers/dashboard.html' %}
+
+{% block content %}
+<div class="container mt-5">
+<table class="table ">
+    <thead>
+      <tr>
+        <th scope="col"><b>ID</b></th>
+        <th scope="col">Name</th>
+        <th scope="col">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for i in teams %}
+      <tr>
+        <th scope="row"><a href="{% url 'teachers:guruh' i.id %}">{{i.name}}</a></th>
+        <td>{{i.date_created}}</td>
+        <td>activ</td>
+
+      </tr>
+    {% endfor %}
+
+    </tbody>
+  </table>
+</div>
+{% endblock content %}

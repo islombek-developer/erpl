@@ -1,0 +1,30 @@
+{% extends 'teachers/dashboard.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Davomat List for {{ team.name }}</h1>
+    <form method="post">
+        {% csrf_token %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Student</th>
+                    <th>Attendance</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                    <tr>
+                        <td>{{ student.user.first_name }} {{ student.user.last_name }}</td>
+                        <td>
+                            <input type="checkbox" name="status_{{ student.id }}" 
+                                {% if student_attendance.student.id %}checked{% endif %}>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <button type="submit" class="btn-submit">Save Attendance</button>
+    </form>
+</div>
+{% endblock content %}

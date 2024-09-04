@@ -1,0 +1,40 @@
+{% extends 'students/dashboard.html' %}
+
+{% block content %}
+<h2>Homework for {{ lesson.title }}</h2>
+<div class="container mt-5">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Titel</th>
+          <th scope="col">Date</th>
+          <th scope="col">File</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for lesson in lessons %}
+          <tr>
+            <th scope="row">{{ lesson.title }}</th>
+            <td>{{ lesson.date }}</td>
+            <td>
+                {% if lesson.lesson_file %}
+                <a href="{{ homework.lesson_file.url }}">{{homework.lesson_file}}</a>
+                {% else %}
+                No File
+                {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  
+<div class="container" style="background-color: rgb(216, 228, 228);">
+    <h3 style="text-align:initial">Upload Homework</h3>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success mt-2">Upload</button>
+    </form>
+</div>
+{% endblock content %}

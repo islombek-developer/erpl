@@ -1,0 +1,37 @@
+{% extends 'teachers/dashboard.html' %}
+
+{% block content %}
+<h2>All Homework Submissions</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Student Name</th>
+            <th>Lesson Title</th>
+            <th>Homework File</th>
+            <th>Grade</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for homework in homeworks %}
+        <tr>
+            <td>{{ homework.student.user.first_name }} {{ homework.student.user.last_name }}</td>
+            <td>{{ homework.lesson.title }}</td>
+            <td>
+                {% if homework.homework_file %}
+                    <a href="{{ homework.homework_file.url }}">Download</a>
+                {% else %}
+                    No file submitted
+                {% endif %}
+            </td>
+            <td>{{ homework.grade|default:"Not graded yet" }}</td>
+            <td>
+                <a href="{% url 'teachers:review_homework' homework.id %}" class="btn btn-primary">Review & Grade</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock content %}
