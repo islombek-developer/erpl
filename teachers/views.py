@@ -7,6 +7,23 @@ from  students.models import Lesson,Team,Homework,Davomat,Date
 from users.forms import ProfileForm,ResetPasswordForm
 from .forms import CreateLessonForm,DavomatForm
 from django.urls import reverse
+from users.forms import StudentForm
+from django.db import IntegrityError
+
+class TeamStudentListView(View):
+    def get(self, request):
+        form = StudentForm()
+        return render(request, 'teachers/create_student.html', {'form': form})
+
+    def post(self, request):
+        form = StudentForm(request.POST)
+        if form.is_valid():
+            try:
+                student = form.save()
+                return redirect('/teachers/dashboard')  
+            except IntegrityError:
+                form.add_error('username', 'Username already exists')
+        return render(request, 'teachers/create_student.html', {'form': form})   
 
 
 class TeacherView(TeacherRequiredMixin,View):
@@ -118,43 +135,13 @@ class TeacherHomeworkListView(TeacherRequiredMixin, View):
 
 
 class DavomatListView(View):
-    def get(self, request, id):
-        team = get_object_or_404(Team, id=id)
-        students = team.students.all()
-        current_date = Date.objects.last()
-        davomat_records = Davomat.objects.filter(team=team, date=current_date)
+    model = Davomat
+    template_name = 'davomat_list.html'
+    
+    def get_queryset(self):
+        team_id = self.kwargs['team_id']
+        return Davomat.objects.filter(student__team_id=team_id)
 
-        student_attendance = {
-            student.id: {
-                'name': student.user.first_name,
-                'status': next((d.status for d in davomat_records if d.student == student), False)
-            }
-            for student in students
-        }
-
-        return render(request, 'teachers/davomat_list.html', {
-            'students': students,
-            'team': team,
-            'student_attendance': student_attendance,
-        })
-
-    def post(self, request, id):
-        team = get_object_or_404(Team, id=id)
-        students = team.students.all()
-        current_date = Date.objects.last()
-
-        # Process attendance for each student
-        for student in students:
-            status = request.POST.get(f'status_{student.id}', 'off') == 'on'
-            Davomat.objects.update_or_create(
-                team=team,
-                student=student,
-                date=current_date,
-                defaults={'status': status}
-            )
-
-        messages.success(request, "Attendance saved successfully.")
-        return redirect('teachers:student')
 
 from django.views import View
 from .models import Month
@@ -162,45 +149,44 @@ from .forms import MonthForm
 
 class TeacherMonthStudent(TeacherRequiredMixin,View):
     def get(self, request, id):
-        month = get_object_or_404(Month, id=id)
-        team = month.team
-        months = Month.objects.filter(team=team)
-
-        return render(request, 'teachers/moth.html', {
+        month = get_object_or_404(Team, id=id)
+        months = month.tolov_set.all()
+        return render(request, 'teachers/month.html', context={
             'month': month,
             'months': months,
         })
 
 
-
-
-
-
-
 class CreateMonthView(View):
     def get(self, request, *args, **kwargs):
+        team_id = kwargs.get('team_id')
         form = MonthForm()
-        return render(request, 'teachers/create_month.html', {'form': form})
+        return render(request, 'teachers/create_month.html', {'form': form, 'team_id': team_id})
 
     def post(self, request, *args, **kwargs):
+        team_id = kwargs.get('team_id')
+        team = Team.objects.get(id=team_id)
+
         form = MonthForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('/dashboard')
-        return render(request, 'teachers/create_month.html', {'form': form})
+            month = form.save(commit=False)
+            month.team = team  
+            month.save()
+            return redirect('/teachers/guruhlarim/')
+        
+        return render(request, 'teachers/create_month.html', {'form': form, 'team_id': team_id})
     
 class DeleteMonthView(View):
     def get(self, request, id, *args, **kwargs):
         month = get_object_or_404(Month, id=id)
         month.delete()
-        return redirect('/dashboard')  
+        return redirect('/teachers/guruhlarim/')  
     
 class TolovListView(View):
     def get(self, request, id):
         month = get_object_or_404(Month, id=id)
         tolovs = Tolov.objects.filter(month=month)
         total_oylik = Tolov.total_oylik_for_month(id)
-
         context = {
             'month': month,
             'tolovs': tolovs,
@@ -219,5 +205,13 @@ class CreateTolovView(View):
         form = TolovForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('/dashboard') 
+            return redirect('/teachers/guruhlarim/') 
         return render(request, 'teachers/create_tolov.html', {'form': form})
+
+class DeleteStudent(View):
+    def get(self,request,id):
+        student = get_object_or_404(Student, id=id)
+        user = User.objects.get(username=student.user.username)
+        student.delete()
+        user.delete()
+        return redirect('/teachers/dashboard')

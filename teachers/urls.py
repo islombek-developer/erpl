@@ -1,7 +1,7 @@
 from django.urls import path
-from .views import  (TeacherView,TeacherTimesView,TeacherGroup,TeacherHomeworks,CreateMonthView,TolovListView,
+from .views import  (TeacherView,TeacherTimesView,TeacherGroup,TeacherHomeworks,CreateMonthView,TolovListView,DeleteStudent,
                      TeacherStudentsView,ProfileView,EditProfileView,ResetPasswordView,DeleteMonthView,CreateTolovView,
-                     TeacherCreateLessonView,TeacherStudentLeson,DavomatListView,TeacherMonthStudent)
+                     TeacherCreateLessonView,TeacherStudentLeson,DavomatListView,TeacherMonthStudent,TeamStudentListView)
 
 app_name = 'teachers'
 
@@ -18,9 +18,11 @@ urlpatterns = [
     path('create/<int:team_id>/',TeacherCreateLessonView.as_view(),name='create'),
     path('stydents/<int:id>/',TeacherStudentLeson.as_view(),name='stydents'),
     path('davomat/<int:id>/', DavomatListView.as_view(), name='davomat_list'),
-    path('month/<int:id>/', TeacherMonthStudent.as_view(), name='month'),
-    path('create-month/', CreateMonthView.as_view(), name='createmont'),
+    path('month/<int:id>/', TeacherMonthStudent.as_view(), name='month_student'),
+    path('create-month/<int:team_id>/', CreateMonthView.as_view(), name='createmont'),
     path('delete-month/<int:id>', DeleteMonthView.as_view(), name='deletemont'),
     path('create-tolov/', CreateTolovView.as_view(), name='create_tolov'),
     path('tolov-list/<int:id>/', TolovListView.as_view(), name='tolov_list'),
+    path('delete-student-list/<int:id>/', DeleteStudent.as_view(), name='delete_student'),
+    path('team/student/create/', TeamStudentListView.as_view(), name='create_student'),
 ]

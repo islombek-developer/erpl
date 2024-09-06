@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
     <link rel="icon" href="{% static 'icon/talim.ico' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/delete.css' %}">
     <!-- Font Awesome -->
     <link
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
@@ -43,6 +44,10 @@
             <a href="{% url 'teachers:guruhlarim' %}" class="list-group-item list-group-item-action py-3 ripple"
             ><i class="fas fa-users fa-fw me-4"></i><span>Guruhlarim</span></a
           >
+
+          <a href="{% url 'teachers:create_student' %}" class="list-group-item list-group-item-action py-2 ripple"
+          ><i class="fas fa-chart-bar fa-fw me-3"></i><span>Student Register</span></a
+        >
 
 
           <a href="{% url 'teachers:profil' %}" class="list-group-item list-group-item-action py-2 ripple"

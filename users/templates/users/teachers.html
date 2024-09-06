@@ -1,0 +1,109 @@
+{% extends 'users/dashboard.html' %}
+
+{% block content %}
+<div class="container">
+  <div class="input-group rounded">
+  <form method="get">
+    <div class="input-group ">
+      <input type="search" class="form-control rounded" name="search" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+      <button type="submit" class="btn btn-outline-primary" data-mdb-ripple-init>search</button>
+    </div>
+  </form>
+  </div>
+    <table class="table align-middle mb-0 bg-white">
+        <thead class="bg-light">
+          <tr>
+            <th>Teacher Name</th>
+            <th>User Name</th>
+            <th>Team</th>
+            <th>#</th>
+
+          </tr>
+        </thead>
+        <tbody>
+        {% for i in teams %}
+          <tr>
+            
+            <td>
+    
+                
+              <div class="d-flex align-items-center">
+                <div class="ms-3">
+                    <p class="fw-bold mb-1">{{ forloop.counter }}</p>
+                  </div>
+                <img
+                    src="{{i.user.image.url}}"
+                    alt=""
+                    style="width: 45px; height: 45px"
+                    class="rounded-circle"
+                    />
+                <div class="ms-3">
+                  <p class="fw-bold mb-1">{{i.user.first_name}}</p>
+                </div>
+              </div>
+            </td>
+            <td>
+              <p class="fw-normal mb-1">{{i.user.username}}</p>
+            </td>
+            <td class="fw-normal mb-1">{{i.teacher.team}}</td>
+            <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-sm"> <!-- Use modal-sm for smaller size -->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Ochirishni xohlaysizmi?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Yo'q</button>
+                            <a id="confirmDeleteBtn" href="#" class="btn btn-danger">Ha</a>
+                        </div>
+                    </div>
+                </div>
+              </div>
+              
+              <!-- Your table and button code -->
+              <td>
+                  <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-url="{% url 'users:delete_teacher' i.id %}">
+                      Delete
+                  </button>
+              </td>
+              
+              
+              <!-- Bootstrap JS (Ensure it's included) -->
+              <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+              
+              <script>
+                // Attach URL to the "Ha" button dynamically when the modal is shown
+                const deleteModal = document.getElementById('deleteModal');
+                deleteModal.addEventListener('show.bs.modal', function (event) {
+                    const button = event.relatedTarget; // Button that triggered the modal
+                    const url = button.getAttribute('data-url'); // Extract URL from data-url attribute
+                    const confirmDeleteBtn = deleteModal.querySelector('#confirmDeleteBtn');
+                    confirmDeleteBtn.setAttribute('href', url); // Set the URL to the "Ha" button
+                });
+              </script>
+              
+              <!-- Custom CSS for positioning modal at the top and removing backdrop -->
+              <style>
+                .modal-dialog {
+                    margin-top: 5vh; /* Adjust the margin to move the modal closer to the top */
+                }
+                @media (max-width: 576px) {
+                    .modal-dialog {
+                        margin-top: 3vh; /* Adjust for smaller screens */
+                    }
+                }
+                .modal-backdrop {
+                    display: none; /* Remove the black backdrop */
+                }
+              </style>
+          </tr>
+        {% endfor %}
+    
+        </tbody>
+      </table>
+</div>
+{% endblock content %}

@@ -18,7 +18,7 @@ class TeamStudentListView(View):
         if form.is_valid():
             try:
                 student = form.save()
-                return redirect('/dashboard')  # Redirect to a relevant page after creation
+                return redirect('/dashboard')  
             except IntegrityError:
                 form.add_error('username', 'Username already exists')
         return render(request, 'users/create_student.html', {'form': form})     
@@ -186,7 +186,7 @@ class Delete(AdminRequiredMixin,View):
         user = User.objects.get(username=student.user.username)
         student.delete()
         user.delete()
-        return redirect('/students')
+        return redirect('/dashboard')
 
 
 
@@ -210,3 +210,16 @@ class ResetPasswordView(LoginRequiredMixin,View):
 class AdminDashboardView(AdminRequiredMixin, View):
     def get(self, request):
         return render(request, 'users/dashboard.html')
+    
+class TeacherView(View):
+    def get(self,request):
+        teams = Teacher.objects.all()
+        return render(request,'users/teachers.html',{"teams":teams})
+
+class DeleteTeacher(AdminRequiredMixin,View):
+    def get(self,request,id):
+        teacher = get_object_or_404(Teacher, id=id)
+        user = User.objects.get(username=teacher.user.username)
+        teacher.delete()
+        user.delete()
+        return redirect('/teacher')

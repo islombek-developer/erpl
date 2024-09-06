@@ -33,12 +33,15 @@
           <a class="nav-link" href="{% url 'teachers:davomat_list' team.id %}">Yoqlama</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'teachers:month' team.id %}">To'lovlar</a>
-        </li>
+          <a class="nav-link" href="{% url 'teachers:month_student' team.id %}">To'lovlar</a>
+      </li>
       </ul>
       <ul class="nav-item">
           <a class="btn btn-outline-success" href="{% url 'teachers:create' team.id %}">Create Lesson</a>
       </ul>
+      <ul class="nav-item">
+        <a class="btn btn-outline-info" href="{% url 'teachers:createmont' team.id %}">Moth</a>
+    </ul>
     </div>
 
   </div>

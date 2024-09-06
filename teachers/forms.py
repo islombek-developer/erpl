@@ -5,7 +5,7 @@ from .models import Month, Tolov
 class MonthForm(forms.ModelForm):
     class Meta:
         model = Month
-        fields = ['team', 'month']
+        fields = [ 'month']
         widgets = {
             'month': forms.TextInput(attrs={'placeholder': 'Enter month name'}),
         }

@@ -1,0 +1,3 @@
+.custom-backdrop .modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.3) !important; /* Adjust opacity here */
+}
