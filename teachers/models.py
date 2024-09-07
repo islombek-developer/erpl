@@ -10,7 +10,8 @@ class Month(models.Model):
         return f"{self.month} "
 
 class Tolov(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='tolov_set')
+    team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='tolovs')
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='tolov_sets')
     month = models.ForeignKey(Month, on_delete=models.CASCADE, related_name="tolov_set")
     oylik = models.IntegerField()
 

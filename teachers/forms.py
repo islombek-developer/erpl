@@ -2,6 +2,8 @@ from django import forms
 from students.models import Davomat ,Lesson,Date
 from .models import Month, Tolov
 
+
+
 class MonthForm(forms.ModelForm):
     class Meta:
         model = Month
@@ -13,7 +15,7 @@ class MonthForm(forms.ModelForm):
 class TolovForm(forms.ModelForm):
     class Meta:
         model = Tolov
-        fields = ['student', 'month', 'oylik']
+        fields = ['student',  'oylik']
         widgets = {
             'oylik': forms.NumberInput(attrs={'placeholder': 'Enter the amount'}),
         }

@@ -1,0 +1,23 @@
+{% extends 'teachers/dashboard.html' %}
+
+{% block content %}
+<h1>{{ team.name }}: Dates</h1>
+
+
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">date</th>
+        <th scope="col">Team</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for i in dates %}
+        <tr class="table-info">
+             <td><a href="{% url 'teachers:present_students' i.id %}">{{ i.date }}</a></td> 
+             <td>{{ i.team }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+{% endblock content %}

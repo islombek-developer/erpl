@@ -4,7 +4,7 @@
 <body>
     <h1>Payments List</h1>
     <table class="table">
-        <a class="btn btn-outline-success" href="{% url 'teachers:create_tolov'  %}">Create</a>
+        <a class="btn btn-outline-success" href="{% url 'teachers:create_tolov' month.id  %}">Create</a>
         <thead>
             <tr>
                 <th scope="col">Student</th>
@@ -26,6 +26,7 @@
             {% endfor %}
         </tbody>
     </table>
+    <p>jami (Oylik): {{ total_oylik }} ming s'om</p>
 
 </body>
 {% endblock content %}

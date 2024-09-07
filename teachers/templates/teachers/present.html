@@ -1,0 +1,23 @@
+{% extends 'teachers/dashboard.html' %}
+
+{% block content %}
+
+<h2>Present Students for {{ date.date }}</h2>
+<a class="btn btn-outline-success" href="{% url 'teachers:create_attendance'  date.id  %}">Create</a>
+
+
+<ul>
+    {% for davomat in present_students %}
+        <li>{{ davomat.student.user.first_name }} {{ davomat.student.user.last_name }} - 
+            {% if davomat.status %}
+                Kelgan
+            {% else %}
+                Kelmagan
+            {% endif %}
+        </li>
+    {% empty %}
+        <li>No students present.</li>
+    {% endfor %}
+</ul>
+
+{% endblock content %}

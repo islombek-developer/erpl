@@ -8,6 +8,7 @@
 <table class="table">
     <thead>
       <tr>
+        <th scope="col">No</th>
         <th scope="col">First name</th>
         <th scope="col">team</th>
         <th scope="col">Homework status</th>
@@ -17,6 +18,7 @@
     <tbody >
         {% for i in student %}
       <tr class="table-info">
+        <td>{{ forloop.counter }}</td>
         <td>{{i.user.first_name}}</td>
         <td>{{i.team.name}}</td>
         <td>Active</td>

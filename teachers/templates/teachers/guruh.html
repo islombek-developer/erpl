@@ -30,17 +30,20 @@
           <a class="nav-link" href="{% url 'teachers:student' team.id %}">O'quvchilar</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'teachers:davomat_list' team.id %}">Yoqlama</a>
+          <a class="nav-link" href="{% url 'teachers:students_date_list' team.id %}">Yoqlama</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'teachers:month_student' team.id %}">To'lovlar</a>
       </li>
       </ul>
       <ul class="nav-item">
-          <a class="btn btn-outline-success" href="{% url 'teachers:create' team.id %}">Create Lesson</a>
+        <a class="btn btn-outline-primary" href="{% url 'teachers:create_date' team.id %}">bugungi kun</a>
+    </ul>
+      <ul class="nav-item">
+          <a class="btn btn-outline-success" href="{% url 'teachers:create' team.id %}">yangi mavzu</a>
       </ul>
       <ul class="nav-item">
-        <a class="btn btn-outline-info" href="{% url 'teachers:createmont' team.id %}">Moth</a>
+        <a class="btn btn-outline-info" href="{% url 'teachers:createmont' team.id %}">oy tolov</a>
     </ul>
     </div>
 

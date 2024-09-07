@@ -32,7 +32,6 @@ class Homework(models.Model):
     homework_file = models.FileField(upload_to='homeworks', blank=True, null=True)
     date = models.DateTimeField(auto_now_add=True)
 
-
     class Meta:
         unique_together = ['student', 'team']
 
@@ -43,11 +42,16 @@ class Date(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     team = models.ForeignKey(Team,on_delete=models.CASCADE,related_name='team',null=True,blank=True)
 
+    def __str__(self):
+        return str(self.date)
+
 class Davomat(models.Model):
+    team = models.ForeignKey(Team,on_delete=models.CASCADE,related_name='teamsa',null=True,blank=True)
     student = models.ForeignKey(Student,on_delete=models.CASCADE)
     date = models.ForeignKey(Date,on_delete=models.CASCADE)
     status = models.BooleanField(default=True)
 
     def __str__(self) -> str:
-        return f"{self.student} --> ,{self.data} --> {'Present' if self.status else 'Absent'}"
-    
+        return f"{self.student.user.first_name}"
+
+

@@ -1,0 +1,11 @@
+{% extends 'teachers/dashboard.html' %}
+
+{% block content %}
+
+<h2>Create Date</h2>
+<form method="post">
+  {% csrf_token %}
+  <button class="btn-outline-success" type="submit">Create Date</button>
+</form>
+
+{% endblock content %}

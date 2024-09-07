@@ -182,31 +182,57 @@ class DeleteMonthView(View):
         month.delete()
         return redirect('/teachers/guruhlarim/')  
     
+from django.db.models import Sum
+
 class TolovListView(View):
     def get(self, request, id):
         month = get_object_or_404(Month, id=id)
-        tolovs = Tolov.objects.filter(month=month)
-        total_oylik = Tolov.total_oylik_for_month(id)
+        team = month.team
+        students = team.students.all()
+
+        tolovs = Tolov.objects.filter(month=month, student__team=team)
+
+        total_oylik = tolovs.aggregate(total_oylik=Sum('oylik'))['total_oylik'] or 0
+
         context = {
             'month': month,
-            'tolovs': tolovs,
-            'total_oylik': total_oylik
+            'students': students,  
+            'tolovs': tolovs,  
+            'total_oylik': total_oylik,
+            'team': team,
         }
         return render(request, 'teachers/tolov_list.html', context)
-
 from .forms import TolovForm
 
 class CreateTolovView(View):
-    def get(self, request):
-        form = TolovForm()
-        return render(request, 'teachers/create_tolov.html', {'form': form})
+    def get(self, request, month_id):
+        month = get_object_or_404(Month, id=month_id)
+        students = Student.objects.filter(team=month.team)
+        form = TolovForm() 
+        
+        context = {
+            'form': form,
+            'month': month,
+            'students': students,
+        }
+        return render(request, 'teachers/create_tolov.html', context)
 
-    def post(self, request):
-        form = TolovForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('/teachers/guruhlarim/') 
-        return render(request, 'teachers/create_tolov.html', {'form': form})
+    def post(self, request, month_id):
+        month = get_object_or_404(Month, id=month_id)
+        form_data = request.POST
+        students = Student.objects.filter(team=month.team)
+
+        for student in students:
+            payment_amount = form_data.get(f'payment_{student.id}')
+            if payment_amount:
+                Tolov.objects.create(
+                    month=month,
+                    team=month.team,
+                    student=student,
+                    oylik=payment_amount  
+                )
+        
+        return redirect('/teachers/guruhlarim/')
 
 class DeleteStudent(View):
     def get(self,request,id):
@@ -215,3 +241,65 @@ class DeleteStudent(View):
         student.delete()
         user.delete()
         return redirect('/teachers/dashboard')
+
+
+class DateCreateView(View):
+    def get(self, request, team_id):
+        team = get_object_or_404(Team, id=team_id)
+        return render(request, 'teachers/create_date.html', {'team': team})
+
+    def post(self, request, team_id):
+        team = get_object_or_404(Team, id=team_id)
+        Date.objects.create(
+            team=team
+        )
+        
+        return redirect('/teachers/dashboard')
+
+class StudentsDateView(TeacherRequiredMixin, View):
+    def get(self, request, team_id):
+        team = get_object_or_404(Team, id=team_id)
+        dates = Date.objects.filter(team=team)
+        return render(request, 'teachers/date_list.html', {'team': team, 'dates': dates})
+
+def present_students(request, date_id):
+    date = get_object_or_404(Date, id=date_id)
+    present_students = Davomat.objects.filter(date=date, status=True)
+
+    context = {
+        'date': date,
+        'present_students': present_students,
+    }
+    return render(request, 'teachers/present.html', context)
+
+
+
+
+def create_attendance(request, date_id):
+    date = get_object_or_404(Date, id=date_id)
+    # Filter students based on the team associated with the date
+    students = Student.objects.filter(team=date.team)
+    
+    if request.method == 'POST':
+        # Clear previous records for the given date and team
+        Davomat.objects.filter(date=date, team=date.team).delete()
+
+        for student in students:
+            # Get the status from the form
+            status = request.POST.get(f'attendance_{student.id}')
+            # Determine if the checkbox was checked
+            status_value = True if status == 'on' else False
+            Davomat.objects.create(student=student, date=date, team=date.team, status=status_value)
+
+        return redirect('/teachers/guruhlarim/')  
+
+    # Get existing attendance records for the specific date and team
+    existing_attendance = Davomat.objects.filter(date=date, team=date.team)
+    attendance_ids = [attendance.student.id for attendance in existing_attendance]
+
+    context = {
+        'date': date,
+        'students': students,
+        'attendance_ids': attendance_ids,
+    }
+    return render(request, 'teachers/davomat_list.html', context)
