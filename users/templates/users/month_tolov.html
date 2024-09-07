@@ -1,0 +1,27 @@
+{% extends 'users/dashboard.html' %}
+
+{% block content %}
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Month</th>
+            <th scope="col">Team</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if months %}
+            {% for mon in months %}
+            <tr class="table-info">
+                <td><a href="{% url 'users:tolov_teacher' mon.id %}">{{ mon.month }}</a></td>
+                <td>{{ mon.team }}</td>
+            </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="3" class="text-center">No months available yet.</td>
+            </tr>
+        {% endif %}
+    </tbody>
+</table>
+
+{% endblock content %}

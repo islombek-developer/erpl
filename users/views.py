@@ -7,6 +7,8 @@ from .models import User,Student,Team,Teacher
 from .permissionmixin import AdminRequiredMixin,StudentRequiredMixin,TeacherRequiredMixin
 from django.db.models import Q
 from django.db import IntegrityError
+from teachers.models import Tolov,Month
+from django.db.models import Sum
 
 class TeamStudentListView(View):
     def get(self, request):
@@ -223,3 +225,37 @@ class DeleteTeacher(AdminRequiredMixin,View):
         teacher.delete()
         user.delete()
         return redirect('/teacher')
+
+class TolovGroupsView(View):
+    def get(self,request):
+        teams = Team.objects.all()
+        return render(request,'users/groups_tolov.html',{"teams":teams})
+
+class TeacherAdminMonthStudent(View):
+    def get(self, request, id):
+        month = get_object_or_404(Team, id=id)
+        months = month.tolov_set.all()
+        return render(request, 'users/month_tolov.html', context={
+            'month': month,
+            'months': months,
+        })
+
+
+class TolovTeacherListView(View):
+    def get(self, request, id):
+        month = get_object_or_404(Month, id=id)
+        team = month.team
+        students = team.students.all()
+
+        tolovs = Tolov.objects.filter(month=month, student__team=team)
+
+        total_oylik = tolovs.aggregate(total_oylik=Sum('oylik'))['total_oylik'] or 0
+
+        context = {
+            'month': month,
+            'students': students,  
+            'tolovs': tolovs,  
+            'total_oylik': total_oylik,
+            'team': team,
+        }
+        return render(request, 'users/tolov_teacher.html', context)

@@ -1,0 +1,31 @@
+{% extends 'users/dashboard.html' %}
+
+{% block content %}
+<body>
+    <h1>Payments List</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Student</th>
+                <th scope="col">Month</th>
+                <th scope="col">Amount</th>
+            </tr>   
+        </thead>
+        <tbody>
+            {% for tolov in tolovs %}
+                <tr class="table-info">
+                    <td>{{ tolov.student.user.first_name }} {{ tolov.student.user.last_name }}</td>
+                    <td>{{ tolov.month }}</td>
+                    <td>{{ tolov.oylik }} ming so'm</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="3">No payments made yet.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <p>jami (Oylik): {{ total_oylik }} ming s'om</p>
+
+</body>
+{% endblock content %}

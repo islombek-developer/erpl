@@ -202,13 +202,14 @@ class TolovListView(View):
             'team': team,
         }
         return render(request, 'teachers/tolov_list.html', context)
+        
 from .forms import TolovForm
 
 class CreateTolovView(View):
     def get(self, request, month_id):
         month = get_object_or_404(Month, id=month_id)
         students = Student.objects.filter(team=month.team)
-        form = TolovForm() 
+        form = TolovForm()
         
         context = {
             'form': form,
@@ -216,6 +217,25 @@ class CreateTolovView(View):
             'students': students,
         }
         return render(request, 'teachers/create_tolov.html', context)
+
+    def post(self, request, month_id):
+        month = get_object_or_404(Month, id=month_id)
+        students = Student.objects.filter(team=month.team)
+
+        for student in students:
+            payment_amount = request.POST.get(f'payment_{student.id}')
+            if payment_amount:
+                # Check if a record already exists for this student and month
+                existing_tolov = Tolov.objects.filter(student=student, month=month).first()
+                if existing_tolov:
+                    # Update the existing record
+                    existing_tolov.oylik = payment_amount
+                    existing_tolov.save()
+                else:
+                    # Create a new record
+                    Tolov.objects.create(student=student, month=month, oylik=payment_amount)
+        
+        return redirect('/teachers/guruhlarim/')
 
     def post(self, request, month_id):
         month = get_object_or_404(Month, id=month_id)
