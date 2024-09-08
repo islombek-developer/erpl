@@ -1,0 +1,16 @@
+{% extends 'students/dashboard.html' %}
+
+{% block content %}
+
+<h1>Payments for {{ student.user.first_name }} {{ student.user.last_name }}</h1>
+
+<p>Total Payment: {{ total_oylik }}</p>
+
+<h2>Payment Details:</h2>
+<ul>
+    {% for tolov in tolovlar %}
+    <li>{{ tolov.month.month }}: {{ tolov.oylik }}</li>
+    {% endfor %}
+</ul>
+
+{% endblock content %}

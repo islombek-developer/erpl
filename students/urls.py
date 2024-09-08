@@ -2,7 +2,7 @@ from django.urls import path
 from .views import (
     StudentDashboardView, StudentGroupView, StudentLessonsView, 
     HomeworkView, HomeDetailView, ProfileView, EditProfileView, 
-    ResetPasswordView,HomeworkListView
+    ResetPasswordView,HomeworkListView,student_total_oylik
 )
 
 app_name = 'students'
@@ -16,4 +16,5 @@ urlpatterns = [
     path('edit/<int:id>/', EditProfileView.as_view(), name='edit'),
     path('homework-detail/<int:lesson_id>/', HomeDetailView.as_view(), name='homework_detail'),
     path('homeworks/<int:lesson_id>/', HomeworkListView.as_view(), name='homework_list'),
+    path('student/<int:student_id>/payments/', student_total_oylik, name='student_total_oylik'),
   ]

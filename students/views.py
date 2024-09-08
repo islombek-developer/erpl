@@ -110,3 +110,15 @@ class DavomatListView(View):
             return redirect('davomat_list')
         davomat_list = Davomat.objects.all()
         return render(request, 'students/davomat_list.html', {'davomat_list': davomat_list, 'form': form})
+
+def student_total_oylik(request, student_id):
+    student = get_object_or_404(Student, pk=student_id)
+    total_oylik = Tolov.total_oylik_for_student(student_id)  # Make sure this method exists in Tolov model
+    tolovlar = Tolov.objects.filter(student=student)
+    
+    context = {
+        'student': student,
+        'total_oylik': total_oylik,
+        'tolovlar': tolovlar,
+    }
+    return render(request, 'students/student_oylik.html', context)

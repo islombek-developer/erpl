@@ -5,7 +5,7 @@ from  django.views import  View
 from  users.models import Teacher,Student,User
 from  students.models import Lesson,Team,Homework,Davomat,Date
 from users.forms import ProfileForm,ResetPasswordForm
-from .forms import CreateLessonForm,DavomatForm
+from .forms import CreateLessonForm,DavomatForm,TeacherProfileForm
 from django.urls import reverse
 from users.forms import StudentForm
 from django.db import IntegrityError
@@ -68,12 +68,12 @@ class TeacherHomevorkStudent(TeacherRequiredMixin,View):
 class EditProfileView(LoginRequiredMixin, View):
     def get(self, request, id):
         user = get_object_or_404(User, id=id)
-        form = ProfileForm(instance=user)
+        form = TeacherProfileForm(instance=user)
         return render(request, 'teachers/edit.html', {'form': form})
 
     def post(self, request, id):
         user = get_object_or_404(User, id=id)
-        form = ProfileForm(request.POST, request.FILES, instance=user)
+        form = TeacherProfileForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
             form.save()
             return redirect('teachers:profil')  
