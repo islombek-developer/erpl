@@ -113,7 +113,7 @@ class DavomatListView(View):
 
 def student_total_oylik(request, student_id):
     student = get_object_or_404(Student, pk=student_id)
-    total_oylik = Tolov.total_oylik_for_student(student_id)  # Make sure this method exists in Tolov model
+    total_oylik = Tolov.total_oylik_for_student(student_id)  
     tolovlar = Tolov.objects.filter(student=student)
     
     context = {

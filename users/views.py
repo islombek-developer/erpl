@@ -163,7 +163,7 @@ class StudentByTeam(AdminRequiredMixin,View):
     def get(self,request,id):
         team = get_object_or_404(Team,id=id)
         students = team.students.all()
-        return render(request,'users./student.html',{"students":students})
+        return render(request,'users/student.html',{"students":students})
 
 
 class EditStudentView(AdminRequiredMixin, View):
