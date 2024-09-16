@@ -28,5 +28,4 @@ urlpatterns = [
     path('month-teacher/<int:id>/', TeacherAdminMonthStudent.as_view(), name='month_teacher'),
     path('team/student/create/', TeamStudentListView.as_view(), name='create_student'),
     path('tolov-teacher/<int:id>/', TolovTeacherListView.as_view(), name='tolov_teacher'),
-
 ]

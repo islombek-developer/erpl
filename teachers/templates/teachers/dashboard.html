@@ -4,15 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Offline Teacher Panel</title>
+    <title>Offline Admin Panel</title>
     <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
     <link rel="icon" href="{% static 'icon/talim.ico' %}">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <link rel="stylesheet" href="{% static 'css/delete.css' %}">
     <!-- Font Awesome -->
     <link
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-    rel="stylesheet"  
+    rel="stylesheet"
     />
     <!-- Google Fonts -->
     <link
@@ -33,26 +31,24 @@
       <div class="position-sticky">
         <div class="list-group list-group-flush mx-3 mt-4">
                 <a
-                    href="{% url 'teachers:dashboard' %}"
+                    href="#"
                     class="list-group-item list-group-item-action py-2 ripple"
                     aria-current="true"
                 >
-                    <i class="fas fa-globe fa-fw me-3"></i><span>Bosh sahifa</span>
-                </a>
+                     <i class="fas fa-globe fa-fw me-3"></i><span>Bosh sahifa</span>
+          </a>
 
+          <a href="{% url 'teachers:guruhlarim' %}" class="list-group-item list-group-item-action py-3 ripple">
+            <i class="fas fa-users fa-fw me-4"></i><span>Guruhlarim</span>
+          </a>
 
-            <a href="{% url 'teachers:guruhlarim' %}" class="list-group-item list-group-item-action py-3 ripple"
-            ><i class="fas fa-users fa-fw me-4"></i><span>Guruhlarim</span></a
-          >
+          <a href="{% url 'teachers:create_student' %}" class="list-group-item list-group-item-action py-2 ripple">
+            <i class="fas fa-chart-bar fa-fw me-3"></i><span>Student Register</span>
+          </a>
 
-          <a href="{% url 'teachers:create_student' %}" class="list-group-item list-group-item-action py-2 ripple"
-          ><i class="fas fa-chart-bar fa-fw me-3"></i><span>Student Register</span></a
-        >
-
-
-          <a href="{% url 'teachers:profil' %}" class="list-group-item list-group-item-action py-2 ripple"
-            ><i class="fas fa-chart-bar fa-fw me-3"></i><span>Sozlamalar</span></a
-          >
+          <a href="{% url 'teachers:profil' %}" class="list-group-item list-group-item-action py-2 ripple">
+            <i class="fas fa-chart-bar fa-fw me-3"></i><span>Sozlamalar</span>
+          </a>
         </div>
       </div>
     </nav>
@@ -80,7 +76,7 @@
         <img
           src="{% static 'icon/ummat.jpg' %}"
           height="50"
-          alt="Ummat ta`lim Logo"
+          alt="Najot ta`lim Logo"
           loading="lazy"
         />
         </a>
@@ -111,7 +107,7 @@
               aria-labelledby="navbarDropdownMenuLink"
             >
               <li>
-                <a class="dropdown-item" href="{% url 'users:profil' %}">My profile</a>
+                <a class="dropdown-item" href="{% url 'teachers:profil' %}">My profile</a>
               </li>
               <li>
                 <a class="dropdown-item" href="{% url 'users:logout' %}">Logout</a>

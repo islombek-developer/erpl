@@ -43,8 +43,11 @@
             <td class="fw-normal mb-1">{{i.team}}</td>
             
             <td>
-              <a class="btn btn-outline-info" href="{% url 'users:edit_student' i.id %}">Edit</a>
-              <a class="btn btn-outline-danger" href="{% url 'users:delete' i.id %}">delete</a>
+              <a class="btn btn-outline-info btn-sm" href="{% url 'users:edit_student' i.id %}">
+                <i class="fas fa-edit"></i>
+              </a>
+              <a class="btn btn-outline-danger btn-sm" href="{% url 'users:delete' i.id %}">
+                <i class="fas fa-trash-alt"></i>
             </td>
             
           </tr>
