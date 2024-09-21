@@ -2,7 +2,7 @@ from django.urls import path
 from .views import  (TeacherView,TeacherTimesView,TeacherGroup,TeacherHomeworks,CreateMonthView,TolovListView,DeleteStudent,
                      TeacherStudentsView,ProfileView,EditProfileView,ResetPasswordView,DeleteMonthView,CreateTolovView,
                      TeacherCreateLessonView,TeacherStudentLeson,DavomatListView,TeacherMonthStudent,TeamStudentListView,
-                     DateCreateView,StudentsDateView)
+                     DateCreateView,StudentsDateView,LessonDetailView)
 from .views import present_students,create_attendance
 app_name = 'teachers'
 
@@ -30,4 +30,5 @@ urlpatterns = [
     path('teachers/date-list/<int:team_id>/', StudentsDateView.as_view(), name='students_date_list'),
     path('present-students/<int:date_id>/', present_students, name='present_students'),
     path('create-attendance/<int:date_id>/', create_attendance, name='create_attendance'),
+        path('lesson/<int:pk>/', LessonDetailView.as_view(), name='lesson_detail'),
 ]

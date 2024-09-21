@@ -1,9 +1,10 @@
 from django import forms
 from .models import Homework,Davomat
 
-class HomeworkForm(forms.Form):
-    description = forms.CharField(widget=forms.TextInput({'class': 'form-control'}))
-    homework_file = forms.FileField(widget=forms.FileInput())
+class HomeworkForm(forms.ModelForm):
+    class Meta:
+        model = Homework
+        fields = ['description', 'homework_file']
 
 
 class DavomatForm(forms.ModelForm):

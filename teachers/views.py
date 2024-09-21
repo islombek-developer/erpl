@@ -323,3 +323,28 @@ def create_attendance(request, date_id):
         'attendance_ids': attendance_ids,
     }
     return render(request, 'teachers/davomat_list.html', context)
+
+
+from django.views.generic import DetailView
+class LessonDetailView( DetailView):
+    model = Lesson
+    template_name = 'homework.html'
+    context_object_name = 'lesson'
+
+    def get_context_data(self, **kwargs):
+        # Get the context from the parent DetailView
+        context = super().get_context_data(**kwargs)
+        
+        # Get the current lesson
+        lesson = self.get_object()
+
+        # Get the current student (assuming user has a related Student object)
+        student = get_object_or_404(Student, user=self.request.user)
+
+        # Filter homework by the student and lesson
+        homework = Homework.objects.filter(lesson=lesson, student=student).first()
+
+        # Add the student's homework status to the context
+        context['homework'] = homework
+
+        return context

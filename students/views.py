@@ -26,33 +26,62 @@ class StudentLessonsView(StudentRequiredMixin, View):
     def get(self, request, group_id):
         team = get_object_or_404(Team, id=group_id)
         lessons = team.lesson.all()
-        return render(request, 'students/lessons.html', context={"lessons":lessons})
-    
+        student = get_object_or_404(Student, user=request.user)
+
+        homework_statuses = []
+        for lesson in lessons:
+            has_homework = Homework.objects.filter(lesson=lesson, student=student).exists()
+            homework_statuses.append({
+                'lesson': lesson,
+                'has_homework': has_homework
+            })
+
+        return render(request, 'students/lessons.html', context={
+            "homework_statuses": homework_statuses
+        })
 
 class HomeworkView(StudentRequiredMixin, View):
     def get(self, request, lesson_id):
-        form = HomeworkForm()
-        return render(request, 'students/homework.html', context={"form":form})
-    
+        lesson = get_object_or_404(Lesson, id=lesson_id)
+        student = get_object_or_404(Student, user=request.user)
+
+        homework = Homework.objects.filter(lesson=lesson, student=student).first()
+        form = HomeworkForm(instance=homework) if homework else HomeworkForm()
+
+        return render(request, 'students/homework.html', {
+            'form': form,
+            'lesson': lesson,
+            'homework': homework,
+        })
+
     def post(self, request, lesson_id):
         lesson = get_object_or_404(Lesson, id=lesson_id)
         student = get_object_or_404(Student, user=request.user)
 
-        form = HomeworkForm(request.POST, request.FILES)
+        # Attempt to fetch existing homework submission
+        homework = Homework.objects.filter(lesson=lesson, student=student).first()
+
+        if homework:
+            # Update existing homework
+            form = HomeworkForm(request.POST, request.FILES, instance=homework)
+        else:
+            # Create a new homework instance
+            form = HomeworkForm(request.POST, request.FILES)
+
         if form.is_valid():
-            homework = Homework()
-            homework.lesson = lesson
-            homework.student = student
-            homework.description = form.cleaned_data['description']
-            homework.homework_file = form.cleaned_data['homework_file']
-            homework.save()
+            homework_instance = form.save(commit=False)
+            homework_instance.lesson = lesson
+            homework_instance.student = student
+            homework_instance.save()  # This will create or update as needed
 
-            lesson.homework_status = True
-            lesson.save()
+            return redirect('students:homework_detail', lesson.id)
 
-            return redirect('students:dashboard')
-        form = HomeworkForm()
-        return render(request, 'students/homework.html', context={"form":form})
+        return render(request, 'students/homework.html', {
+            'form': form,
+            'lesson': lesson,
+            'homework': homework,
+        })
+
         
 class HomeDetailView(StudentRequiredMixin,View):
     def get(self,request,lesson_id):
